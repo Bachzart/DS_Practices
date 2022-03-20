@@ -1,0 +1,8 @@
+# no .a and .o files
+*.[oa]
+
+# ignore the temp files from emacs and others
+*~
+
+# ignore .exe files
+*.exe
