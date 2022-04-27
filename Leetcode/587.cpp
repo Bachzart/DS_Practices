@@ -8,7 +8,8 @@ public:
         if(n < 4) return trees;
         int leftmost = 0;
         for(int i = 0; i < n; i++) {
-            if(trees[i][0] < trees[leftmost][0]) leftmost = i;
+            if(trees[i][0] < trees[leftmost][0] ||
+                (trees[i][0] == trees[leftmost][0] && trees[i][1] < trees[leftmost][1])) leftmost = i;
         }
         vector<vector<int>> res;
         vector<bool> visit(n, false);
