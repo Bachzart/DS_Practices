@@ -26,7 +26,7 @@ public:
                     int j = code.find('>', i);
                     if(j == string::npos) return false;
                     string tagname = code.substr(i + 1, j - (i + 1));
-                    if(tagname.size() < 1 || tagname.size() > 9) return false;
+                    if(tagname.length() < 1 || tagname.length() > 9) return false;
                     if(!all_of(tagname.begin(), tagname.end(), [](unsigned char c) { return isupper(c); })) {
                         return false;
                     }
