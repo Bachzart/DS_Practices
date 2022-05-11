@@ -28,9 +28,9 @@ public:
         }
         double logk = log(k);
         int cnt = 0;
-        for(int i = 0; i < size; i++) {
-            int l = upper_bound(logprefix.begin(), logprefix.begin() + i + 1, logprefix[i + 1] - log(k) + 1e-10) - logprefix.begin();
-            cnt += i + 1 - l;
+        for(int r = 0; r < size; r++) {
+            int l = upper_bound(logprefix.begin(), logprefix.begin() + r + 1, logprefix[r + 1] - logk + 1e-10) - logprefix.begin();
+            cnt += r + 1 - l;
         }
         return cnt;
     }
@@ -41,15 +41,17 @@ public:
 class Solution {
 public:
     int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+        if(k == 0) return 0;
         int size = nums.size(), cnt = 0;
-        int product = 1, i = 0;
-        for(int j = 0; j < size; j++) {
-            product *= nums[j];
-            while(i <= j && product >= k) {
-                product /= nums[i];
-                i++;
+        int left = 0, right = 0, product = 1;
+        while(right < size) {
+            product *= nums[right];
+            while(left <= right && product >= k) {
+                product /= nums[left];
+                left++;
             }
-            cnt += j - i + 1;
+            cnt += right - left + 1;
+            right++;
         }
         return cnt;
     }
