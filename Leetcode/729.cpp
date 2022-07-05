@@ -131,3 +131,25 @@ public:
 private:
     map<int, int> calendar;
 };
+
+/* flag method, like 731, 732, etc. */
+class MyCalendar {
+public:
+    MyCalendar() {}
+    bool book(int start, int end) {
+        calendar[start]++;
+        calendar[end]--;
+        int cnt = 0;
+        for(auto &[_, i]: calendar) {
+            cnt += i;
+            if(cnt > 1) {
+                calendar[start]--;
+                calendar[end]++;
+                return false;
+            }
+        }
+        return true;
+    }
+private:
+    map<int, int> calendar;
+};
