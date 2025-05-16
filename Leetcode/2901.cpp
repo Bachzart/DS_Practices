@@ -14,36 +14,40 @@ public:
             return differ == 1;
         };
         int maxSize = 1;
-        vector<int> indices;
         for(int i = 1; i < n; ++i) {
             for(int j = 0; j < i; ++j) {
                 if(groups[i] != groups[j] && f(words[i], words[j])) 
-                    if(dp[j] + 1 > dp[i]) {
-                        dp[i] = dp[j] + 1;
-                        indices.push_back(j);
-                    }
+                    dp[i] = max(dp[j] + 1, dp[i]);
             }
             if(dp[i] > maxSize) 
                 maxSize = dp[i];
         } 
-        for_each(indices.begin(), indices.end(), [&](int i) {
-            cout << i << ' ';
-        });
-        cout << endl;
         vector<string> ans;
         if(maxSize == 1) {
             ans.push_back(words[0]);
             return ans;
         }
-        for(int i: indices) {
-            ans.push_back(words[i]);
-        }
+        vector<int> indices;
+        int preidx = -1;
+        bool first = true;
         for(int i = n - 1; i >= 0; --i) {
-            if(maxSize == dp[i]) {
-                ans.push_back(words[i]);
-                break;
+            if(dp[i] == maxSize) {
+                if(first) {
+                    indices.push_back(i);
+                    preidx = i;
+                    first = false;
+                    --maxSize;
+                } else {
+                    if(f(words[preidx], words[i]) && groups[preidx] != groups[i]) {
+                        indices.push_back(i);
+                        --maxSize;
+                        preidx = i;
+                    }
+                }
             }
         }
+        for(int i = indices.size() - 1; i >= 0; --i)
+            ans.push_back(words[indices[i]]);
         return ans;
     }
 };
