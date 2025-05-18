@@ -3,6 +3,7 @@ public:
     vector<string> getWordsInLongestSubsequence(vector<string>& words, vector<int>& groups) {
         int n = words.size();
         vector<int> dp(n, 1);
+        vector<int> pre_idx(n, -1);
         auto f = [&](const string& s1, const string& s2) -> bool {
             if(s1.length() != s2.length())
                 return false;
@@ -10,44 +11,26 @@ public:
             for(int i = 0; i < s1.length(); ++i) {
                 if(s1[i] != s2[i])
                     ++differ;
+                if(differ > 1)
+                    return false;
             }
             return differ == 1;
         };
-        int maxSize = 1;
+        int last_idx = 0;
         for(int i = 1; i < n; ++i) {
             for(int j = 0; j < i; ++j) {
-                if(groups[i] != groups[j] && f(words[i], words[j])) 
+                if(f(words[i], words[j]) && dp[j] + 1 > dp[i] && groups[i] != groups[j]) {
                     dp[i] = max(dp[j] + 1, dp[i]);
-            }
-            if(dp[i] > maxSize) 
-                maxSize = dp[i];
-        } 
-        vector<string> ans;
-        if(maxSize == 1) {
-            ans.push_back(words[0]);
-            return ans;
-        }
-        vector<int> indices;
-        int preidx = -1;
-        bool first = true;
-        for(int i = n - 1; i >= 0; --i) {
-            if(dp[i] == maxSize) {
-                if(first) {
-                    indices.push_back(i);
-                    preidx = i;
-                    first = false;
-                    --maxSize;
-                } else {
-                    if(f(words[preidx], words[i]) && groups[preidx] != groups[i]) {
-                        indices.push_back(i);
-                        --maxSize;
-                        preidx = i;
-                    }
+                    pre_idx[i] = j;
                 }
             }
-        }
-        for(int i = indices.size() - 1; i >= 0; --i)
-            ans.push_back(words[indices[i]]);
+            if(dp[i] > dp[last_idx]) 
+                last_idx = i;
+        } 
+        vector<string> ans;
+        for(int i = last_idx; i >= 0; i = pre_idx[i]) 
+            ans.emplace_back(words[i]);
+        reverse(ans.begin(), ans.end());
         return ans;
     }
 };
