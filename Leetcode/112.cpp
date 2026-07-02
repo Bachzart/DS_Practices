@@ -9,7 +9,23 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-/* method 1 */
+/*
+Method 3
+*/
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if(root == nullptr) return false;
+        if(root->left == nullptr && root->right == nullptr) {
+            return targetSum == root->val;
+        }
+        return hasPathSum(root->left, targetSum - root->val) ||
+                hasPathSum(root->right, targetSum - root->val);
+    }
+};
+
+
+/* method 1 
 class Solution {
 public:
     bool dfs(TreeNode *root, int targetSum, int sum) {
@@ -31,8 +47,9 @@ public:
         return hasPathSum(root->left, targetSum - root->val) || hasPathSum(root->right, targetSum - root->val);
     }
 };
+*/
 
-/* method 2 */
+/* method 2 
 class Solution {
 public:
     bool hasPathSum(TreeNode* root, int targetSum) {
@@ -60,3 +77,5 @@ public:
         return false;
     }
 };
+
+*/
